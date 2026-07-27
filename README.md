@@ -6,6 +6,8 @@ Fits second-order autoregressive models to gene expression data and computes the
 
 ## Installation
 
+Requires Python 3.9 or later.
+
 ```bash
 pip install par2-circadian
 ```
@@ -136,7 +138,6 @@ An AI coding agent (Replit Agent, Anthropic/Replit) was used to assist with impl
 Large language models (Claude, Anthropic; GPT-4, OpenAI) were used for drafting, structural editing, and refinement of documentation and manuscript text. All scientific content — the analytical framework, hypothesis design, dataset selection, validation architecture, and scientific interpretation — originated with and was decided by the author.
 
 The AR(2) framework, the eigenvalue hierarchy hypothesis, and all scientific judgements are the author's own. The responsibility for the correctness and adequacy of all results remains exclusively with the human author.
-
 
 ## License
 

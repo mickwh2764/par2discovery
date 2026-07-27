@@ -38,7 +38,7 @@ test:
     - par2 --help
 
 about:
-  home: https://github.com/mickwh2764/par2-discovery-engine
+  home: https://github.com/mickwh2764/par2discovery
   summary: AR(2) eigenvalue analysis for gene expression time series
   description: |
     Fits second-order autoregressive models to gene expression data and
@@ -47,8 +47,8 @@ about:
     Clock > Target > Background.
   license: PolyForm-Noncommercial-1.0.0
   license_file: LICENSE
-  doc_url: https://github.com/mickwh2764/par2-discovery-engine/tree/main/par2-python-package
-  dev_url: https://github.com/mickwh2764/par2-discovery-engine
+  doc_url: https://github.com/mickwh2764/par2discovery#readme
+  dev_url: https://github.com/mickwh2764/par2discovery
 
 extra:
   recipe-maintainers:
