@@ -9,6 +9,10 @@ dist/
 .mypy_cache/
 .ruff_cache/
 
+# Output written by the example scripts
+example_output.csv
+mouse_liver_results.csv
+
 # Virtual environments
 .venv/
 venv/
