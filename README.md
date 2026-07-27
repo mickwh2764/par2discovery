@@ -129,6 +129,15 @@ The three-layer hierarchy emerges because clock genes (strong autonomous oscilla
 
 See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in circadian gene expression." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
+## AI Usage Statement
+
+An AI coding agent (Replit Agent, Anthropic/Replit) was used to assist with implementation of platform modules and translation of analytical specifications into code. Each module was specified by the author in terms of mathematical requirements and validation criteria, implemented by the agent, and verified against known analytical results before incorporation.
+
+Large language models (Claude, Anthropic; GPT-4, OpenAI) were used for drafting, structural editing, and refinement of documentation and manuscript text. All scientific content — the analytical framework, hypothesis design, dataset selection, validation architecture, and scientific interpretation — originated with and was decided by the author.
+
+The AR(2) framework, the eigenvalue hierarchy hypothesis, and all scientific judgements are the author's own. The responsibility for the correctness and adequacy of all results remains exclusively with the human author.
+
+
 ## License
 
 PolyForm Noncommercial License 1.0.0 — free for noncommercial use. **Commercial
@@ -139,3 +148,4 @@ UK patent application, covering the methodology independently of this software l
 If you use this software in academic work, please cite:
 
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in circadian gene expression." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
+
