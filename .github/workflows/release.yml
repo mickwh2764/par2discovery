@@ -44,4 +44,19 @@ jobs:
         with:
           name: dist
           path: dist/
+      - name: Check whether this version is already on PyPI
+        id: published
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            "https://pypi.org/pypi/par2-circadian/$version/json")
+          if [ "$code" = "200" ]; then
+            echo "par2-circadian $version is already on PyPI; skipping upload."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.published.outputs.skip == 'false'
+        with:
+          skip-existing: true
