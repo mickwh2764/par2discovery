@@ -131,6 +131,19 @@ The three-layer hierarchy emerges because clock genes (strong autonomous oscilla
 
 See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in circadian gene expression." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
+## Related work
+
+Michael Whiteside, independent computational systems researcher
+([ORCID 0009-0000-0643-5791](https://orcid.org/0009-0000-0643-5791)).
+
+| | |
+| --- | --- |
+| Reproducible analyses | [`par2-reproducibility`](https://github.com/mickwh2764/par2-reproducibility) — per-paper bundles that rerun the published numbers from public GEO data using this package |
+| Platform | [par2discovery.com](https://par2discovery.com) |
+| Method preprint | [AR(2) eigenvalue modulus as a measure of temporal persistence in gene expression](https://doi.org/10.21203/rs.3.rs-9283100/v1) |
+| Tissue-specific dynamics | [A phase-gated autoregressive framework](https://doi.org/10.21203/rs.3.rs-9214347/v1) |
+| Half-life independence | [Context-dependent expression persistence](https://doi.org/10.21203/rs.3.rs-9385465/v1) |
+
 ## AI Usage Statement
 
 An AI coding agent (Replit Agent, Anthropic/Replit) was used to assist with implementation of platform modules and translation of analytical specifications into code. Each module was specified by the author in terms of mathematical requirements and validation criteria, implemented by the agent, and verified against known analytical results before incorporation.
