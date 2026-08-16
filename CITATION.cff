@@ -11,7 +11,7 @@ abstract: >-
   extracts the eigenvalue modulus of the characteristic polynomial as a scalar
   measure of temporal persistence, recovering the Clock > Target > Background
   hierarchy in circadian datasets.
-version: 1.1.6
+version: 1.1.7
 license: PolyForm-Noncommercial-1.0.0
 doi: 10.5281/zenodo.21963192
 identifiers:
@@ -20,7 +20,7 @@ identifiers:
     description: Concept DOI, always resolving to the latest release
   - type: doi
     value: 10.5281/zenodo.21963193
-    description: Version DOI for release v1.1.6
+    description: Version DOI for release v1.1.6, the first archived release
 repository-code: "https://github.com/mickwh2764/par2discovery"
 url: "https://par2discovery.com"
 keywords:
