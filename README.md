@@ -171,5 +171,6 @@ Every release is archived on Zenodo. `10.5281/zenodo.21963192` is the concept
 DOI and always resolves to the latest version; cite a version DOI only when you
 need to pin exactly what you ran.
 
-The full publication list, with one entry per work and every DOI verified, is at
-[par2discovery.com/publications.bib](https://par2discovery.com/publications.bib).
+The full publication list lives at
+<https://par2discovery.com/publications.bib> — one entry per work, every DOI
+verified against Crossref or DataCite.
