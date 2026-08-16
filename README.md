@@ -158,7 +158,7 @@ this repository" button reads it, as do Zenodo, `cffconvert` and most reference
 managers. Please cite the software and the method preprint together:
 
 > Whiteside M (2026). *par2-circadian: AR(2) eigenvalue analysis for gene
-> expression time series*. Version 1.1.5.
+> expression time series*. Version 1.1.6.
 > https://github.com/mickwh2764/par2discovery
 >
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal
