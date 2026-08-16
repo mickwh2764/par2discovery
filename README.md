@@ -1,5 +1,7 @@
 # par2-circadian
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21963192.svg)](https://doi.org/10.5281/zenodo.21963192)
+
 **AR(2) eigenvalue analysis for gene expression time series**
 
 Fits second-order autoregressive models to gene expression data and computes the eigenvalue modulus |λ|, a single number that quantifies how strongly a gene's past determines its future (temporal persistence). Discovers the three-layer hierarchy: Clock > Target > Background.
@@ -129,7 +131,7 @@ For real roots: |λ| = max(|r₁|, |r₂|)
 
 The three-layer hierarchy emerges because clock genes (strong autonomous oscillation) have higher |λ| than clock-controlled target genes (driven oscillation), which in turn have higher |λ| than background genes (no circadian regulation).
 
-See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in circadian gene expression." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
+See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in gene expression: circadian hierarchy emerges from two coefficients." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
 ## Researcher Profile
 
@@ -158,12 +160,16 @@ this repository" button reads it, as do Zenodo, `cffconvert` and most reference
 managers. Please cite the software and the method preprint together:
 
 > Whiteside M (2026). *par2-circadian: AR(2) eigenvalue analysis for gene
-> expression time series*. Version 1.1.6.
-> https://github.com/mickwh2764/par2discovery
+> expression time series*. Version 1.1.6. Zenodo.
+> doi:10.5281/zenodo.21963192
 >
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal
 > persistence in gene expression: circadian hierarchy emerges from two
 > coefficients." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
+
+Every release is archived on Zenodo. `10.5281/zenodo.21963192` is the concept
+DOI and always resolves to the latest version; cite a version DOI (1.1.6 is
+`10.5281/zenodo.21963193`) only when you need to pin exactly what you ran.
 
 The full publication list, with one entry per work and every DOI verified, is at
 [par2discovery.com/publications.bib](https://par2discovery.com/publications.bib).
