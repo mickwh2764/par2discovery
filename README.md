@@ -160,7 +160,7 @@ this repository" button reads it, as do Zenodo, `cffconvert` and most reference
 managers. Please cite the software and the method preprint together:
 
 > Whiteside M (2026). *par2-circadian: AR(2) eigenvalue analysis for gene
-> expression time series*. Version 1.1.6. Zenodo.
+> expression time series*. Version 1.1.7. Zenodo.
 > doi:10.5281/zenodo.21963192
 >
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal
@@ -168,8 +168,8 @@ managers. Please cite the software and the method preprint together:
 > coefficients." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
 Every release is archived on Zenodo. `10.5281/zenodo.21963192` is the concept
-DOI and always resolves to the latest version; cite a version DOI (1.1.6 is
-`10.5281/zenodo.21963193`) only when you need to pin exactly what you ran.
+DOI and always resolves to the latest version; cite a version DOI only when you
+need to pin exactly what you ran.
 
 The full publication list, with one entry per work and every DOI verified, is at
 [par2discovery.com/publications.bib](https://par2discovery.com/publications.bib).
