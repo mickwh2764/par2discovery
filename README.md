@@ -171,6 +171,10 @@ Every release is archived on Zenodo. `10.5281/zenodo.21963192` is the concept
 DOI and always resolves to the latest version; cite a version DOI only when you
 need to pin exactly what you ran.
 
+In a Methods section, identify the software as `par2-circadian (RRID:SCR_028837)`.
+The package is also registered in [bio.tools](https://bio.tools/par2-circadian) as
+`biotools:par2-circadian`.
+
 The full publication list lives at
 <https://par2discovery.com/publications.bib> — one entry per work, every DOI
 verified against Crossref or DataCite.

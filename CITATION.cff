@@ -21,6 +21,12 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.21963193
     description: Version DOI for release v1.1.6, the first archived release
+  - type: other
+    value: "RRID:SCR_028837"
+    description: Research Resource Identifier, SciCrunch Registry
+  - type: other
+    value: "biotools:par2-circadian"
+    description: bio.tools registry entry
 repository-code: "https://github.com/mickwh2764/par2discovery"
 url: "https://par2discovery.com"
 keywords:
