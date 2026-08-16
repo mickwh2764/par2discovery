@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+title: "par2-circadian: AR(2) eigenvalue analysis for gene expression time series"
+message: "If you use this software, please cite both the software and the method preprint below."
+type: software
+authors:
+  - given-names: Michael
+    family-names: Whiteside
+    orcid: "https://orcid.org/0009-0000-0643-5791"
+abstract: >-
+  Fits second-order autoregressive models to gene expression time series and
+  extracts the eigenvalue modulus of the characteristic polynomial as a scalar
+  measure of temporal persistence, recovering the Clock > Target > Background
+  hierarchy in circadian datasets.
+version: 1.1.5
+license: PolyForm-Noncommercial-1.0.0
+repository-code: "https://github.com/mickwh2764/par2discovery"
+url: "https://par2discovery.com"
+keywords:
+  - circadian rhythms
+  - gene expression
+  - autoregressive modelling
+  - AR(2)
+  - eigenvalue modulus
+  - temporal persistence
+  - chronobiology
+  - time-series analysis
+preferred-citation:
+  type: article
+  title: "AR(2) eigenvalue modulus as a measure of temporal persistence in gene expression: circadian hierarchy emerges from two coefficients"
+  authors:
+    - given-names: Michael
+      family-names: Whiteside
+      orcid: "https://orcid.org/0009-0000-0643-5791"
+  doi: 10.21203/rs.3.rs-9283100/v1
+  url: "https://doi.org/10.21203/rs.3.rs-9283100/v1"
+  year: 2026
+  publisher:
+    name: Research Square
+  notes: "Preprint, under review."
+references:
+  - type: software
+    title: "PAR(2) reproducibility: analysis code and expected results"
+    authors:
+      - given-names: Michael
+        family-names: Whiteside
+        orcid: "https://orcid.org/0009-0000-0643-5791"
+    repository-code: "https://github.com/mickwh2764/par2-reproducibility"
+    license: MIT
+    notes: "Per-paper bundles that rerun the published numbers from public GEO data using this package."
