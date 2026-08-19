@@ -48,6 +48,21 @@ print(f"Health grade:  {hierarchy['health_grade']}")
 par2.save_results(results, "ar2_results.csv")
 ```
 
+### Confidence intervals
+
+A point estimate of |λ| from a short series is imprecise, so `fit_ar2` can return
+a residual-bootstrap 95% interval alongside it:
+
+```python
+result = par2.fit_ar2(expression, n_bootstrap=2000, seed=1)
+print(result["eigenvalue"], result["eigenvalue_ci"])
+```
+
+The residuals are resampled, the series regenerated from the fitted recursion and
+the model refitted, so only the one observed series is needed — no biological
+replicates, which most circadian designs do not provide. Intervals are opt-in and
+absent unless `n_bootstrap > 0`.
+
 ### Command Line
 
 ```bash
@@ -116,6 +131,12 @@ Each gene gets:
 | 0.3–0.5 | Weak persistence (e.g., downstream effectors) |
 | 0.0–0.3 | Rapidly decaying / noise-dominated |
 
+These bands describe groups of genes, not individual ones. At 24 evenly sampled
+timepoints the 95% interval on a single gene's |λ| is typically ~0.4 wide, and
+the estimator is biased upward below ~24 points, so a lone value can easily fall
+in the wrong row. Report `eigenvalue_ci` with any per-gene number, compare groups
+rather than genes, and do not interpret differences smaller than the interval.
+
 ## Method
 
 The AR(2) model fits:
@@ -160,7 +181,7 @@ this repository" button reads it, as do Zenodo, `cffconvert` and most reference
 managers. Please cite the software and the method preprint together:
 
 > Whiteside M (2026). *par2-circadian: AR(2) eigenvalue analysis for gene
-> expression time series*. Version 1.1.7. Zenodo.
+> expression time series*. Version 1.1.8. Zenodo.
 > doi:10.5281/zenodo.21963192
 >
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal
