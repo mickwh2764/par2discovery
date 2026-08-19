@@ -4,7 +4,11 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple, Union
 
 
-def fit_ar2(expression: Union[List[float], np.ndarray]) -> Dict:
+def fit_ar2(
+    expression: Union[List[float], np.ndarray],
+    n_bootstrap: int = 0,
+    seed: Optional[int] = None,
+) -> Dict:
     """Fit an AR(2) model to a single gene expression time series.
 
     The expression values are mean-centred before fitting. The model is:
@@ -19,6 +23,11 @@ def fit_ar2(expression: Union[List[float], np.ndarray]) -> Dict:
     ----------
     expression : array-like
         Gene expression values (minimum 6 timepoints).
+    n_bootstrap : int, default 0
+        When > 0, also return a residual-bootstrap 95% confidence interval for
+        |lambda|, phi1 and phi2 (see `bootstrap_ar2`). 2000 draws is ample.
+    seed : int, optional
+        Seed for the bootstrap resampling, for reproducible intervals.
 
     Returns
     -------
@@ -30,6 +39,18 @@ def fit_ar2(expression: Union[List[float], np.ndarray]) -> Dict:
         root_type : str     -- 'Complex' or 'Real'
         half_life : float   -- ln(2) / ln(|lambda|) if |lambda| > 0 and < 1
         eigenperiod : float -- period from complex roots (NaN for real roots)
+
+    With n_bootstrap > 0, additionally:
+        eigenvalue_ci : [low, high] -- 95% percentile interval for |lambda|
+        phi1_ci, phi2_ci : [low, high]
+        n_timepoints : int
+
+    Notes
+    -----
+    A point estimate of |lambda| from a short series is imprecise: at 24 evenly
+    sampled timepoints the 95% interval is typically ~0.4 wide, and the
+    estimator is biased upward below ~24 points. Report the interval alongside
+    any per-gene value, and do not interpret differences smaller than it.
     """
     x = np.asarray(expression, dtype=np.float64)
     if len(x) < 6:
@@ -75,7 +96,7 @@ def fit_ar2(expression: Union[List[float], np.ndarray]) -> Dict:
     else:
         hl = float("nan")
 
-    return {
+    result = {
         "eigenvalue": round(eigenvalue, 6),
         "phi1": round(phi1, 6),
         "phi2": round(phi2, 6),
@@ -83,6 +104,78 @@ def fit_ar2(expression: Union[List[float], np.ndarray]) -> Dict:
         "root_type": root_type,
         "half_life": round(hl, 4) if not np.isnan(hl) else None,
         "eigenperiod": round(eigenperiod, 4) if not np.isnan(eigenperiod) else None,
+    }
+
+    if n_bootstrap > 0:
+        result.update(bootstrap_ar2(x, phi1, phi2, n_bootstrap=n_bootstrap, seed=seed))
+
+    return result
+
+
+def bootstrap_ar2(
+    centred: np.ndarray,
+    phi1: float,
+    phi2: float,
+    n_bootstrap: int = 2000,
+    seed: Optional[int] = None,
+    ci: float = 95.0,
+) -> Dict:
+    """Residual-bootstrap confidence intervals for an AR(2) fit.
+
+    The fitted residuals are resampled with replacement, the series is
+    regenerated from the fitted recursion, and the model is refitted; the
+    percentile interval over the refits is returned. This is the standard
+    interval for autoregressive coefficients and requires only the single
+    fitted series -- no biological replicates, which most circadian designs
+    (one animal pool per timepoint) do not provide.
+
+    Parameters
+    ----------
+    centred : ndarray
+        The mean-centred series the coefficients were fitted to.
+    phi1, phi2 : float
+        Fitted AR(2) coefficients.
+
+    Returns
+    -------
+    dict with 'eigenvalue_ci', 'phi1_ci', 'phi2_ci' (each [low, high]) and
+    'n_timepoints'.
+    """
+    x = np.asarray(centred, dtype=np.float64)
+    n = len(x)
+    resid = x[2:] - (phi1 * x[1:-1] + phi2 * x[:-2])
+    resid = resid - resid.mean()
+
+    rng = np.random.default_rng(seed)
+    lambdas: List[float] = []
+    phi1s: List[float] = []
+    phi2s: List[float] = []
+    for _ in range(n_bootstrap):
+        eps = rng.choice(resid, n - 2, replace=True)
+        xb = np.empty(n)
+        xb[:2] = x[:2]
+        for t in range(2, n):
+            xb[t] = phi1 * xb[t - 1] + phi2 * xb[t - 2] + eps[t - 2]
+        try:
+            refit = fit_ar2(xb)
+        except (ValueError, np.linalg.LinAlgError):
+            continue
+        lambdas.append(refit["eigenvalue"])
+        phi1s.append(refit["phi1"])
+        phi2s.append(refit["phi2"])
+
+    lo, hi = (100 - ci) / 2, 100 - (100 - ci) / 2
+
+    def interval(draws: List[float]) -> Optional[List[float]]:
+        if not draws:
+            return None
+        return [round(float(v), 6) for v in np.percentile(draws, [lo, hi])]
+
+    return {
+        "eigenvalue_ci": interval(lambdas),
+        "phi1_ci": interval(phi1s),
+        "phi2_ci": interval(phi2s),
+        "n_timepoints": n,
     }
 
 

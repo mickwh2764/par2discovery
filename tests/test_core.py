@@ -89,6 +89,40 @@ def test_eigenperiod_metric():
     assert math.isnan(ep_real)
 
 
+def test_bootstrap_interval_is_ordered_and_reproducible():
+    """Residual bootstrap returns an ordered, seed-reproducible interval."""
+    t = np.arange(24)
+    x = 0.85 ** t * np.cos(2 * np.pi * t / 12) + 0.1 * np.random.RandomState(3).randn(24)
+    a = fit_ar2(x, n_bootstrap=300, seed=1)
+    b = fit_ar2(x, n_bootstrap=300, seed=1)
+    assert a["eigenvalue_ci"] == b["eigenvalue_ci"]
+    assert a["eigenvalue_ci"][0] < a["eigenvalue_ci"][1]
+    assert a["phi1_ci"][0] < a["phi1_ci"][1]
+    assert a["phi2_ci"][0] < a["phi2_ci"][1]
+    assert a["n_timepoints"] == 24
+
+
+def test_bootstrap_absent_by_default():
+    """The interval is opt-in so existing callers are unaffected."""
+    x = np.random.RandomState(4).randn(30)
+    assert "eigenvalue_ci" not in fit_ar2(x)
+
+
+def test_bootstrap_interval_narrows_with_series_length():
+    """Precision improves with more timepoints; 24 points cannot resolve 0.03."""
+    rng = np.random.RandomState(5)
+
+    def series(n):
+        t = np.arange(n)
+        return np.cos(2 * np.pi * t / 12) * 0.7 ** (t / 12) + 0.3 * rng.randn(n)
+
+    short = fit_ar2(series(24), n_bootstrap=400, seed=2)
+    long = fit_ar2(series(96), n_bootstrap=400, seed=2)
+    width = lambda r: r["eigenvalue_ci"][1] - r["eigenvalue_ci"][0]
+    assert width(long) < width(short)
+    assert width(short) > 0.1
+
+
 if __name__ == "__main__":
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     passed = 0
