@@ -1,0 +1,4 @@
+sim/
+results/meta_n*/
+results/rain_n*.csv
+results/lambda_fits.csv
