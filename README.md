@@ -154,6 +154,25 @@ The three-layer hierarchy emerges because clock genes (strong autonomous oscilla
 
 See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in gene expression: circadian hierarchy emerges from two coefficients." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
+## Benchmark and scope
+
+`benchmarks/` holds a ground-truth simulation suite comparing |λ| with JTK_CYCLE,
+ARSER, Lomb–Scargle (via MetaCycle) and RAIN on series whose answer is known. In
+summary:
+
+- |λ| is the most sensitive of the methods tested on **noise-driven** AR(2)
+  oscillators (92% vs 40–62% at true |λ| = 0.618, n = 24, matched 5% false-positive
+  rate) and the only one that detects non-24 h rhythms without being told the period.
+- The p-value methods beat it on **clean deterministic** waveforms (100% vs 83% on a
+  sustained cosine).
+- **|λ| is a persistence measure, not a rhythm test.** Calibrated on white noise it
+  calls plain AR(1) red noise at 85%, because red noise genuinely is persistent. Pair
+  |λ| with a rhythm test before calling a gene an oscillator.
+- Point estimates are biased upward at low persistence (+0.21 at true 0.30, n = 24),
+  which compresses rather than manufactures a clock-versus-target gap.
+
+See `benchmarks/README.md` for the full tables and reproduction steps.
+
 ## Researcher Profile
 
 **Michael Whiteside** — independent computational systems researcher  
