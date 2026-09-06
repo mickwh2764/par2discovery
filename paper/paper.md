@@ -76,7 +76,7 @@ false-positive rate on white noise. Two results characterise where the package
 is useful. On noise-driven AR(2) oscillators with $|\lambda| = 0.618$ at 24
 timepoints, the bootstrap-supported $|\lambda|$ criterion detects 92% against
 40–62% for the p-value methods. On sustained 12 h series, methods searching a
-20–28 h window detect $\leq$0.5% while raw $|\lambda|$ detects 57%, because it
+20–28 h window detect $\leq$ 0.5% while raw $|\lambda|$ detects 57%, because it
 is period-agnostic. Conversely, on a clean sustained 24 h cosine the incumbents
 reach 100% and raw $|\lambda|$ 12%: where the signal really is a fixed
 sinusoid, a sinusoidal test is better.
