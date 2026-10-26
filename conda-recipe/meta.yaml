@@ -1,5 +1,5 @@
 {% set name = "par2-circadian" %}
-{% set version = "1.2.0" %}
+{% set version = "1.2.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/par2_circadian-{{ version }}.tar.gz
-  sha256: 059a4ff84d9346d7fde5a5c23437c7357b5bf7f292994c8a5e99959a94c54512
+  sha256: 06d1f8d571a71259ee973f14be5d2c82fac67520cf181b8c97268f9ea0cb47d3
 
 build:
   noarch: python
