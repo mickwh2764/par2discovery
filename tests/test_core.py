@@ -11,6 +11,14 @@ from par2.core import fit_ar2, fit_ar2_batch, classify_dynamics
 from par2.metrics import half_life, eigenperiod
 
 
+def test_unstable_radius_is_not_clipped():
+    fit = fit_ar2([3.0 ** i for i in range(12)])
+    assert fit["phi1"] == 4
+    assert fit["phi2"] == -3
+    assert fit["eigenvalue"] == 3
+    assert fit["half_life"] is None
+
+
 def test_pure_cosine():
     """A pure cosine with period 12 samples should give |lambda| near 1 and complex roots."""
     t = np.arange(24)

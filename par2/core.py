@@ -89,7 +89,8 @@ def fit_ar2(
         eigenvalue = max(abs(r1), abs(r2_root))
         eigenperiod = float("nan")
 
-    eigenvalue = float(min(eigenvalue, 2.0))
+    # Return the spectral radius of the reported coefficients, even when unstable.
+    eigenvalue = float(eigenvalue)
 
     if 0 < eigenvalue < 1:
         hl = np.log(2) / (-np.log(eigenvalue))

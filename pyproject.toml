@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "par2-circadian"
-version = "1.2.0"
+version = "1.2.1"
 description = "AR(2) eigenvalue analysis for gene expression time series"
 readme = "README.md"
 license = "Apache-2.0"
