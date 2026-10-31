@@ -75,7 +75,7 @@ def save_results(
     if not results:
         return
 
-    cols = ["gene", "eigenvalue", "phi1", "phi2", "r2", "root_type", "half_life", "eigenperiod"]
+    cols = ["gene", "eigenvalue", "phi1", "phi2", "r2", "root_type", "half_life", "eigenperiod", "timescale"]
     present = [c for c in cols if c in results[0]]
 
     with open(filepath, "w", newline="") as f:

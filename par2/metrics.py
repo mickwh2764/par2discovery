@@ -24,6 +24,36 @@ def half_life(eigenvalue: float, sampling_interval: float = 2.0) -> float:
     return sampling_interval * math.log(2) / (-math.log(eigenvalue))
 
 
+def timescale(eigenvalue: float, sampling_interval: float = 2.0) -> float:
+    """Convert |lambda| to a decay time constant in real time units.
+
+    tau = -sampling_interval / ln(|lambda|): the time for a perturbation to
+    fall to 1/e (about 37%) of its size. Unlike |lambda|, which is per sample,
+    tau can be compared across studies sampled at different intervals. The
+    half-life is tau * ln(2).
+
+    Converting units does not remove short-series imprecision; report the
+    interval from ``fit_ar2(..., n_bootstrap=..., sampling_interval=...)``.
+
+    Parameters
+    ----------
+    eigenvalue : float
+        |lambda| from an AR(2) fit.
+    sampling_interval : float
+        Time between consecutive samples (default 2 hours).
+
+    Returns
+    -------
+    float : tau in the units of sampling_interval; 0.0 if |lambda| <= 0, and
+    float('inf') if |lambda| >= 1, where nothing decays.
+    """
+    if eigenvalue <= 0:
+        return 0.0
+    if eigenvalue >= 1.0:
+        return float("inf")
+    return sampling_interval / (-math.log(eigenvalue))
+
+
 def eigenperiod(phi1: float, phi2: float, sampling_interval: float = 2.0) -> float:
     """Compute the intrinsic oscillation period from AR(2) coefficients.
 

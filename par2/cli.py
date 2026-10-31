@@ -15,6 +15,12 @@ def main():
     parser.add_argument("--gene-col", type=int, default=0, help="Column index for gene names (default: 0)")
     parser.add_argument("--skip-cols", type=int, default=1, help="Number of leading columns before expression data (default: 1)")
     parser.add_argument("--delimiter", default=",", help="Field delimiter (default: comma)")
+    parser.add_argument(
+        "--interval",
+        type=float,
+        default=None,
+        help="Hours (or other unit) between samples; adds a 'timescale' column, tau = -interval / ln|lambda|",
+    )
     parser.add_argument("--top", type=int, default=None, help="Show only top N genes by eigenvalue")
 
     args = parser.parse_args()
@@ -35,7 +41,7 @@ def main():
 
     print(f"Loaded {len(gene_names)} genes x {matrix.shape[1]} timepoints", file=sys.stderr)
 
-    results = fit_ar2_batch(matrix, gene_names)
+    results = fit_ar2_batch(matrix, gene_names, sampling_interval=args.interval)
 
     if args.top:
         results = results[: args.top]
