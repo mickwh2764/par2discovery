@@ -75,3 +75,11 @@ def test_cli_on_bundled_example_dataset(monkeypatch, tmp_path):
     with open(out) as f:
         rows = list(csv.DictReader(f))
     assert len(rows) == 30
+
+
+def test_cli_interval_adds_timescale_column(monkeypatch, tmp_path):
+    out = tmp_path / "results.csv"
+    run_cli(monkeypatch, make_input(tmp_path), "-o", str(out), "--interval", "2")
+    with open(out) as f:
+        rows = list(csv.DictReader(f))
+    assert "timescale" in rows[0]

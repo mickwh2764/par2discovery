@@ -63,6 +63,25 @@ the model refitted, so only the one observed series is needed — no biological
 replicates, which most circadian designs do not provide. Intervals are opt-in and
 absent unless `n_bootstrap > 0`.
 
+### Persistence in hours
+
+|λ| is per sample, so the same gene gives a different |λ| at 1-, 2- or 4-hourly
+sampling. Pass the sampling interval to get the decay time constant
+τ = −Δt / ln|λ| in real time units, which can be compared across designs (the
+half-life is τ × ln 2):
+
+```python
+result = par2.fit_ar2(expression, n_bootstrap=2000, seed=1, sampling_interval=2)
+print(result["timescale"], result["timescale_ci"])   # hours
+par2.timescale(0.781, sampling_interval=1)           # 4.05 hours
+```
+
+With both options, `timescale_imprecise` is `True` (and a warning is issued) when
+the interval is unbounded or spans more than tenfold. Converting units does not
+fix short series: in hourly mouse liver data (GSE11923), Dbp gives τ ≈ 4 h at
+48 hourly points but ≈ 18 h with a 4–226 h interval when thinned to 24 two-hourly
+points. On the command line, `par2 data.csv --interval 2` adds a `timescale` column.
+
 ### Command Line
 
 ```bash
@@ -112,6 +131,7 @@ Each gene gets:
 - **root_type**: 'Complex' (oscillatory) or 'Real' (monotone decay)
 - **half_life**: persistence half-life in sampling intervals
 - **eigenperiod**: intrinsic oscillation period (complex roots only)
+- **timescale**: decay time constant τ in the units of `sampling_interval` (only when it is given)
 
 ### Hierarchy Discovery
 
@@ -206,7 +226,7 @@ this repository" button reads it, as do Zenodo, `cffconvert` and most reference
 managers. Please cite the software and the method preprint together:
 
 > Whiteside M (2026). *par2-circadian: AR(2) eigenvalue analysis for gene
-> expression time series*. Version 1.2.0. Zenodo.
+> expression time series*. Version 1.3.0. Zenodo.
 > doi:10.5281/zenodo.21963192
 >
 > Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal

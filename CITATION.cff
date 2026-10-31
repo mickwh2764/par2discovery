@@ -11,7 +11,7 @@ abstract: >-
   extracts the eigenvalue modulus of the characteristic polynomial as a scalar
   measure of temporal persistence, recovering the Clock > Target > Background
   hierarchy in circadian datasets.
-version: 1.2.1
+version: 1.3.0
 license: Apache-2.0
 doi: 10.5281/zenodo.21963192
 identifiers:

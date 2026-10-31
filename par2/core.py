@@ -1,13 +1,23 @@
 """Core AR(2) fitting and eigenvalue computation."""
 
+import math
+import warnings
+
 import numpy as np
 from typing import Dict, List, Optional, Tuple, Union
+
+from .metrics import timescale
+
+# A timescale interval whose upper end is more than this many times its lower
+# end (or is unbounded) cannot support a per-gene persistence claim.
+TIMESCALE_IMPRECISE_RATIO = 10.0
 
 
 def fit_ar2(
     expression: Union[List[float], np.ndarray],
     n_bootstrap: int = 0,
     seed: Optional[int] = None,
+    sampling_interval: Optional[float] = None,
 ) -> Dict:
     """Fit an AR(2) model to a single gene expression time series.
 
@@ -28,6 +38,11 @@ def fit_ar2(
         |lambda|, phi1 and phi2 (see `bootstrap_ar2`). 2000 draws is ample.
     seed : int, optional
         Seed for the bootstrap resampling, for reproducible intervals.
+    sampling_interval : float, optional
+        Time between consecutive samples (e.g. 2 for 2-hourly sampling). When
+        given, the decay time constant tau = -sampling_interval / ln|lambda| is
+        added, in the same units. |lambda| is per sample and cannot be compared
+        across sampling designs; tau can.
 
     Returns
     -------
@@ -45,6 +60,17 @@ def fit_ar2(
         phi1_ci, phi2_ci : [low, high]
         n_timepoints : int
 
+    With sampling_interval, additionally:
+        timescale : float   -- tau in units of sampling_interval
+                               (None if |lambda| >= 1)
+
+    With both, additionally:
+        timescale_ci : [low, high] -- tau at the |lambda| interval ends
+                                      (inf where the interval reaches 1)
+        timescale_imprecise : bool -- True when the interval is unbounded or
+                                      spans more than tenfold; a UserWarning
+                                      is also issued
+
     Notes
     -----
     A point estimate of |lambda| from a short series is imprecise: at 24 evenly
@@ -52,6 +78,9 @@ def fit_ar2(
     estimator is biased upward below ~24 points. Report the interval alongside
     any per-gene value, and do not interpret differences smaller than it.
     """
+    if sampling_interval is not None and not sampling_interval > 0:
+        raise ValueError(f"sampling_interval must be positive, got {sampling_interval}")
+
     x = np.asarray(expression, dtype=np.float64)
     if len(x) < 6:
         raise ValueError(f"Need >= 6 timepoints, got {len(x)}")
@@ -110,7 +139,34 @@ def fit_ar2(
     if n_bootstrap > 0:
         result.update(bootstrap_ar2(x, phi1, phi2, n_bootstrap=n_bootstrap, seed=seed))
 
+    if sampling_interval is not None:
+        result.update(_timescale_fields(result, sampling_interval))
+
     return result
+
+
+def _timescale_fields(result: Dict, sampling_interval: float) -> Dict:
+    tau = timescale(result["eigenvalue"], sampling_interval)
+    fields: Dict = {"timescale": round(tau, 4) if math.isfinite(tau) else None}
+
+    ci = result.get("eigenvalue_ci")
+    if ci is None:
+        return fields
+
+    low, high = (timescale(v, sampling_interval) for v in ci)
+    fields["timescale_ci"] = [round(v, 4) if math.isfinite(v) else v for v in (low, high)]
+    imprecise = not math.isfinite(high) or low <= 0 or high / low > TIMESCALE_IMPRECISE_RATIO
+    fields["timescale_imprecise"] = imprecise
+    if imprecise:
+        upper = "unbounded" if not math.isfinite(high) else f"{high:.3g}"
+        warnings.warn(
+            f"timescale interval [{low:.3g}, {upper}] spans more than "
+            f"{TIMESCALE_IMPRECISE_RATIO:g}-fold: this series is too short or "
+            "too noisy to support a per-gene persistence claim",
+            UserWarning,
+            stacklevel=3,
+        )
+    return fields
 
 
 def bootstrap_ar2(
@@ -183,6 +239,7 @@ def bootstrap_ar2(
 def fit_ar2_batch(
     expression_matrix: np.ndarray,
     gene_names: Optional[List[str]] = None,
+    sampling_interval: Optional[float] = None,
 ) -> List[Dict]:
     """Fit AR(2) to every row of an expression matrix.
 
@@ -190,6 +247,8 @@ def fit_ar2_batch(
     ----------
     expression_matrix : ndarray of shape (n_genes, n_timepoints)
     gene_names : optional list of gene name strings
+    sampling_interval : float, optional
+        Time between samples; adds each gene's 'timescale' (see fit_ar2).
 
     Returns
     -------
@@ -208,7 +267,7 @@ def fit_ar2_batch(
         if len(expr) < 6:
             continue
         try:
-            res = fit_ar2(expr)
+            res = fit_ar2(expr, sampling_interval=sampling_interval)
             res["gene"] = gene_names[i]
             results.append(res)
         except Exception:

@@ -5,11 +5,11 @@ from importlib.metadata import PackageNotFoundError, version as _pkg_version
 try:
     __version__ = _pkg_version("par2-circadian")
 except PackageNotFoundError:  # running from a source tree without installation
-    __version__ = "1.2.1"
+    __version__ = "1.3.0"
 
 from .core import fit_ar2, fit_ar2_batch, bootstrap_ar2, classify_dynamics
 from .io import load_expression_matrix, save_results
-from .metrics import half_life, eigenperiod
+from .metrics import half_life, eigenperiod, timescale
 from .hierarchy import (
     discover_hierarchy,
     gearbox_gap,
@@ -27,6 +27,7 @@ __all__ = [
     "save_results",
     "half_life",
     "eigenperiod",
+    "timescale",
     "discover_hierarchy",
     "gearbox_gap",
     "classify_gene_layer",
