@@ -83,3 +83,21 @@ a specific value such as 1/φ ≈ 0.618, which the CI width already rules out.
 
 Full tables in `results/` (`detection.csv`, `calibrated_power.csv`, `recovery.csv`,
 `sensitivity_by_scenario.csv`); figures in `figures/`.
+
+## Timescale under measurement noise
+
+`python benchmarks/noise_bias.py` (about 3 minutes) simulates series with a known
+decay time constant and compares it with `fit_ar2(..., sampling_interval=dt)`;
+it writes `results/noise_bias.csv`. Median τ as a fraction of the true value:
+
+| Scenario | True τ | Ratio | Rank correlation |
+|---|---|---|---|
+| Damped 24 h wave, 10 min, no noise | 24–120 h | 1.00–1.02 | 1.00 |
+| Same, noise 5% of starting amplitude | 24–120 h | 0.15–0.28 | 0.97 |
+| Same, noise 20% | 24–120 h | 0.02–0.05 | 0.88 |
+| Noise-driven oscillator, 2 h × 48 h, 30% noise | 6–96 h | 0.05–0.52 | 0.38 |
+
+The AR(2) fit has no measurement-error term, so τ describes the measured series and
+is a lower bound on the underlying decay time. Ordering survives in long, dense
+recordings; in short, sparse designs τ barely tracks the truth, and the bootstrap
+imprecision flag (which measures spread, not bias) rarely fires.
