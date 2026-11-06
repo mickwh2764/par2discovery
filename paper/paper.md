@@ -27,7 +27,9 @@ persistence*: how strongly a transcript's recent past constrains its next
 value. From the two fitted coefficients the package derives, per gene, the root
 type (complex roots indicate an oscillatory decay mode, real roots a monotone
 one), the persistence half-life in sampling intervals, the intrinsic
-eigenperiod where roots are complex, and an optional residual-bootstrap
+eigenperiod where roots are complex, the decay time constant
+$\tau = -\Delta t / \ln|\lambda|$ in real time units when the sampling interval
+$\Delta t$ is given, and an optional residual-bootstrap
 confidence interval on $|\lambda|$ obtained by resampling residuals and
 refitting, so that no biological replicates are required. It provides a Python
 API, a command-line interface for CSV expression matrices, and a helper that
@@ -83,7 +85,7 @@ sinusoid, a sinusoidal test is better.
 
 # Limitations
 
-Two limitations are measured in the benchmark and should govern use.
+Three limitations are measured in the benchmark and should govern use.
 First, **autocorrelation is not oscillation**: calibrated on white noise,
 $|\lambda|$ classifies plain AR(1) red noise as a positive 85% of the time, and
 correctly so, since red noise is genuinely persistent. A high $|\lambda|$ is
@@ -93,6 +95,14 @@ estimator is **biased upward at low persistence** — at 24 timepoints a true
 $|\lambda|$ of 0.30 estimates 0.51, while at 0.90 the bias is negligible — and
 bootstrap intervals under-cover in that regime. Point estimates from short
 series should not be compared at two decimal places.
+Third, **measurement noise shortens $\tau$**: the model has no observation-error
+term, so $\tau$ is the persistence of the measured series and a lower bound on the
+underlying decay time. On a damped 24 h wave sampled every 10 min, $\tau$ is exact
+without noise but 0.15–0.28 of the true value with noise at 5% of the starting
+amplitude, although rank order is preserved ($\rho = 0.97$). At 2-hourly sampling
+over 48 h it stays near 3–5 h for true values of 6–96 h ($\rho = 0.38$), a bias the
+bootstrap imprecision flag does not detect. $\tau$ should be compared only between
+series with similar signal-to-noise.
 
 # Acknowledgements
 
@@ -127,8 +137,11 @@ submission.
 This work was produced with substantial AI assistance, which the author
 considers material enough to state in detail rather than in a single sentence.
 
-*Software and benchmark.* AI coding agents — most recently Devin (Cognition
-AI), and Replit Agent for earlier work on the author's platform — wrote most of
+*Tools.* Devin (Cognition AI), used July–November 2026 for the package code,
+tests, benchmarks, documentation and this paper's text; Replit Agent (Replit),
+used in 2025–2026 for earlier work on the author's separate web platform.
+
+*Software and benchmark.* These agents wrote most of
 the implementation, the test suite and the benchmark harness from
 specifications set by the author, who defined what was to be computed, what
 would count as a correct answer, and which comparisons mattered. The agents
@@ -141,6 +154,9 @@ Bibliographic records were retrieved
 programmatically from Crossref rather than typed, and checked against the
 resolved DOIs, after an audit of the author's earlier manuscripts found
 fabricated references produced by unverified AI drafting.
+
+*Review.* The author reviewed, edited and validated all AI-assisted code, results
+and text, and made the core design decisions.
 
 *Boundary.* The AR(2) persistence framework, the decision to measure
 persistence rather than rhythmicity, the choice of comparators and scenarios,

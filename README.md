@@ -82,6 +82,16 @@ fix short series: in hourly mouse liver data (GSE11923), Dbp gives τ ≈ 4 h at
 48 hourly points but ≈ 18 h with a 4–226 h interval when thinned to 24 two-hourly
 points. On the command line, `par2 data.csv --interval 2` adds a `timescale` column.
 
+**Measurement noise shortens τ.** The AR(2) model has no term for measurement
+error, so noise makes each sample look like a partial fresh start. τ is therefore
+the persistence of the *measured* series and a lower bound on the underlying decay
+time. In `benchmarks/noise_bias.py`, a damped 24 h wave sampled every 10 min gives
+τ exactly without noise but 0.15–0.28 × the true value with noise at 5% of the
+starting amplitude, though genes stay in the right order (ρ = 0.97). At 2-hourly
+sampling over 48 h, τ stays near 3–5 h for true values of 6–96 h (ρ = 0.38), and
+the imprecision flag does not catch this bias. Compare τ across genes or conditions
+only where signal-to-noise is similar.
+
 ### Command Line
 
 ```bash
@@ -190,6 +200,8 @@ summary:
   |λ| with a rhythm test before calling a gene an oscillator.
 - Point estimates are biased upward at low persistence (+0.21 at true 0.30, n = 24),
   which compresses rather than manufactures a clock-versus-target gap.
+- **τ is biased short by measurement noise** and stops tracking the true decay time
+  in short, sparse series (see *Persistence in hours* and `benchmarks/noise_bias.py`).
 
 See `benchmarks/README.md` for the full tables and reproduction steps.
 
