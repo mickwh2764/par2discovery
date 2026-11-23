@@ -4,7 +4,7 @@
 
 **AR(2) eigenvalue analysis for gene expression time series**
 
-Fits second-order autoregressive models to gene expression data and computes the eigenvalue modulus |λ|, a single number that quantifies how strongly a gene's past determines its future (temporal persistence). Discovers the three-layer hierarchy: Clock > Target > Background.
+Fits second-order autoregressive models to gene expression data and computes the eigenvalue modulus |λ|, a single number that quantifies how strongly a gene's past determines its future (temporal persistence). Results can be summarised by gene group (for example clock, clock-controlled target and background genes); whether and how the groups differ is a finding for each dataset, not something the method guarantees.
 
 ## Installation
 
@@ -37,7 +37,7 @@ print(f"|λ| = {result['eigenvalue']:.3f}, type = {result['root_type']}")
 matrix, genes = par2.load_expression_matrix("my_data.csv")
 results = par2.fit_ar2_batch(matrix, genes)
 
-# Discover the three-layer hierarchy
+# Compare |λ| across clock, target and background genes
 hierarchy = par2.discover_hierarchy(results)
 print(f"Clock median:  {hierarchy['clock_median']:.3f}")
 print(f"Target median: {hierarchy['target_median']:.3f}")
@@ -180,7 +180,7 @@ The characteristic equation r² − φ₁r − φ₂ = 0 yields eigenvalues whos
 For complex roots: |λ| = √(−φ₂)
 For real roots: |λ| = max(|r₁|, |r₂|)
 
-The three-layer hierarchy emerges because clock genes (strong autonomous oscillation) have higher |λ| than clock-controlled target genes (driven oscillation), which in turn have higher |λ| than background genes (no circadian regulation).
+In the datasets analysed in the method preprint, clock genes tended to have higher |λ| than clock-controlled targets, which tended to exceed the genome-wide background (Clock > Target > Background). Later checks confirmed clock genes above background, but targets exceeded background in only 8 of 12 tissues with none significant after multiple-testing correction, and on one benchmark a simpler AR(1) model separated clock from background genes as well or better. Treat any group ordering as a per-dataset, per-species result.
 
 See: Whiteside M (2026). "AR(2) eigenvalue modulus as a measure of temporal persistence in gene expression: circadian hierarchy emerges from two coefficients." *Research Square* [Preprint]. doi:10.21203/rs.3.rs-9283100/v1
 
